@@ -22,7 +22,7 @@ public class ApiAnswerTest {
     @Test
     public void should_return_id_attribute_of_JSONString() throws JSONException, ParseException, JsonProcessingException {
 
-        String prompt = "What is the content of the following E-Mail: Dear Mr. X, we tried to reach you because of your car insurance. Please call back as soon as possible. Kind Regards, Mrs. Y";
+        String prompt = "Categorize the words in the following sentence: At Sunday 11am, the quirky fox jumps over the lazy dog.";
 
         String answerstring = new ApiRequest().askQuestion(prompt);
         ApiAnswer answer = new ObjectMapper().readValue(answerstring, ApiAnswer.class);
