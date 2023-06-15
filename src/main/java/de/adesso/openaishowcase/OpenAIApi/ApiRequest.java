@@ -1,5 +1,7 @@
 package de.adesso.openaishowcase.OpenAIApi;
 
+import org.apache.tomcat.util.json.ParseException;
+import org.json.JSONException;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -10,14 +12,12 @@ public class ApiRequest {
     private final String apiKey = "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";
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public String askQuestion(String prompt)
-    {
+    public String askQuestion(String prompt) throws JSONException, ParseException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + apiKey);
         HttpEntity<String> request = new HttpEntity<>(new RequestWrapper().wrap(prompt), headers);
         ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_URL, request, String.class);
-
         return response.getBody();
     }
 }
