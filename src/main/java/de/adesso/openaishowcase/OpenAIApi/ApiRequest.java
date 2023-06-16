@@ -12,7 +12,7 @@ public class ApiRequest {
     private final String apiKey = "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";
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public String askQuestion(String prompt) throws JSONException, ParseException {
+    public String askQuestion(String prompt){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + apiKey);
