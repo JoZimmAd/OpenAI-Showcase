@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 
 @SpringBootTest
@@ -18,18 +19,19 @@ public class PipelineTest {
     private final String prompt = "At Sunday 11am, the quirky fox jumps over the lazy dog. At Monday, the blue bird flies to Monaco to visit a grey goose.";
     private final String prompt_de = "Am Sonntag um 11 Uhr springt der schrullige Fuchs über den faulen Hund. Am Montag fliegt der blaue Vogel nach Monaco, um eine Graugans zu besuchen.";
 
+    private final Logger logger = Logger.getLogger("Logger");
     private long startTime;
     @Test
     public void process_Should_Return_Coredocument(){
         pipeline = new Pipeline();
         CoreDocument doc = pipeline.process(prompt_de);
 
-        System.out.println("*******");
-        System.out.println("TEXT: "+doc.text());
-        System.out.println("TOKENS: "+doc.tokens());
-        System.out.println("ENTITIES "+doc.entityMentions());
-        System.out.println("SENTENCES: "+doc.sentences());
-        System.out.println("CORE OF CHAINS: "+doc.corefChains());
+        logger.info("*******");
+        logger.info("TEXT: "+doc.text());
+        logger.info("TOKENS: "+doc.tokens());
+        logger.info("ENTITIES "+doc.entityMentions());
+        logger.info("SENTENCES: "+doc.sentences());
+        logger.info("CORE OF CHAINS: "+doc.corefChains());
 
         Assert.notNull(pipeline,"Pipeline is Null");
         Assert.notNull(pipeline,"Result of pipeline is Null");
@@ -40,20 +42,22 @@ public class PipelineTest {
     public void getNerTags_Should_Return_List_of_Strings(){
         pipeline = new Pipeline();
         List<String> nerTags = pipeline.getNerTags(prompt);
-        System.out.println(nerTags);
+        for (String s: nerTags) {
+            logger.info(s);
+        }
     }
 
     @BeforeEach
     public void setUp(){
-        System.out.println("Starting Tests");
+        logger.info("Starting Tests");
         startTime = System.nanoTime();
     }
 
     @AfterEach
     public void shutDown(){
         long endTime = System.nanoTime();
-        System.out.println("Ausführungszeit: " + (endTime-startTime)/1000000 + "ms");
-        System.out.println("*******");
+        logger.info("Ausführungszeit: " + (endTime-startTime)/1000000 + "ms");
+        logger.info("*******");
     }
 
 }
