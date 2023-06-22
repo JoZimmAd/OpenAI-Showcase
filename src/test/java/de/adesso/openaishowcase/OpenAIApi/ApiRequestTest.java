@@ -2,6 +2,7 @@ package de.adesso.openaishowcase.OpenAIApi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.adesso.openaishowcase.Utils.StringUtils;
 import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
@@ -24,7 +25,7 @@ public class ApiRequestTest {
 
         String answer = new ApiRequest().askQuestion(prompt_de);
         logger.info(answer);
-        isTrue(!answer.isEmpty(),"Received an Answer!");
+        isTrue(!answer.isEmpty(),"Received no Answer!");
     }
 
     @Test
@@ -33,7 +34,7 @@ public class ApiRequestTest {
 
         String answer = new ApiRequest().askQuestion(prompt_en);
         logger.info(answer);
-        isTrue(!answer.isEmpty(),"Received an Answer!");
+        isTrue(!answer.isEmpty(),"Received no Answer!");
     }
 
     @Test
@@ -117,6 +118,32 @@ public class ApiRequestTest {
         ApiAnswer answer = new ObjectMapper().readValue(answerstring, ApiAnswer.class);
         logger.info(answer.getChoices()[0].getMessage().getAnswer());
         isTrue(answer.getChoices()[0].getMessage().getAnswer().equals("support request"),"Answer was false categorized");
+    }
+
+    /**
+     * This test should return the same answer for both prompts, either with or without punctuation. Removing punctuation from the prompt
+     * saves tokens at the API. Every saved token in the input prompt equals around 0,003$
+     * @throws JsonProcessingException
+     */
+    @Test
+    public void askQuestion_Prompt_Without_Punctuation_Should_Return_Same_Answer_de() throws JsonProcessingException {
+        String prompt_de = "Es ist folgende E-Mail gegeben: " +
+        "Sehr geehrter Herr X, ich benötige für die Umsetzung bei meiner Tätigkeit als Entwickler Unterstützung " +
+                "beim Aufsetzen einer Entwicklungsumgebung. Mit freundlichen Grüßen, Mr. Y" +
+                "Welches der folgenden Themen beschreibt diese E-Mail? : {Einkaufen, Segeln, Supportanfrage, Heimwerken}";
+
+        String answerstring = new ApiRequest().askQuestion(prompt_de);
+        ApiAnswer answer = new ObjectMapper().readValue(answerstring, ApiAnswer.class);
+        String returnedAnswer = answer.getChoices()[0].getMessage().getAnswer();
+        logger.info("Antwort ohne Satzzeichenentfernung: " + returnedAnswer);
+
+        String answerstring2 = new ApiRequest().askQuestion(StringUtils.removePunctuation(prompt_de));
+        ApiAnswer answer2 = new ObjectMapper().readValue(answerstring2, ApiAnswer.class);
+        String returnedAnswer2 = answer2.getChoices()[0].getMessage().getAnswer();
+        logger.info("Antwort mit Satzzeichenentfernung: " + returnedAnswer2);
+
+        isTrue(returnedAnswer.equals(returnedAnswer2),"Antworten stimmen nicht überein");
+
     }
 
     @BeforeEach
