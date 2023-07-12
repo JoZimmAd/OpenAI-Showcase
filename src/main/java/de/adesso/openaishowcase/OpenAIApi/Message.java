@@ -2,7 +2,7 @@ package de.adesso.openaishowcase.OpenAIApi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class message {
+public class Message {
 
     @JsonProperty("role")
     private String role;

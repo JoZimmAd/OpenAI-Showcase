@@ -10,7 +10,7 @@ public class Choices {
     private int index;
 
     @JsonProperty("message")
-    private message message;
+    private Message message;
 
     @JsonProperty("finish_reason")
     private String finishReason;
@@ -20,9 +20,9 @@ public class Choices {
 
     public void setIndex(int index) {this.index = index;}
 
-    public message getMessage() {return message;}
+    public Message getMessage() {return message;}
 
-    public void setMessage(de.adesso.openaishowcase.OpenAIApi.message message) {this.message = message;}
+    public void setMessage(Message message) {this.message = message;}
 
     public String getFinishReason() {return finishReason;}
 

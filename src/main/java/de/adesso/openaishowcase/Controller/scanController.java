@@ -1,0 +1,31 @@
+package de.adesso.openaishowcase.Controller;
+
+import de.adesso.openaishowcase.Mail.MailConnection;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.logging.Logger;
+
+@RestController
+public class scanController {
+
+    private final Logger logger = Logger.getLogger("Logger");
+
+    @Autowired
+    MailConnection con;
+    @PostMapping("/scan")
+    public void doPost(HttpServletRequest request, HttpServletResponse respnose) throws MessagingException {
+        con.setAuth(request.getParameter("email"),request.getParameter("password"));
+        List<Message> messages = con.getAllMessages();
+        for (Message m: messages){
+            logger.info("Message: " + m.getSubject());
+        }
+        //TODO close connection
+    }
+}
