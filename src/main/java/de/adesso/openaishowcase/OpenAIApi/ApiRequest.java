@@ -11,6 +11,8 @@ public class ApiRequest {
 
     @Value("${API.key}")
     private String apiKey;
+
+
     private final RestTemplate restTemplate = new RestTemplate();
 
     public String askQuestion(String prompt){
