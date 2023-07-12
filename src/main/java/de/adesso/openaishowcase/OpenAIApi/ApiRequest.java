@@ -1,7 +1,6 @@
 package de.adesso.openaishowcase.OpenAIApi;
 
-import org.apache.tomcat.util.json.ParseException;
-import org.json.JSONException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -9,7 +8,9 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class ApiRequest {
     private static final String OPENAI_URL = "https://api.openai.com/v1/chat/completions";
-    private final String apiKey = "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";
+
+    @Value("${API.key}")
+    private String apiKey;
     private final RestTemplate restTemplate = new RestTemplate();
 
     public String askQuestion(String prompt){
@@ -19,5 +20,9 @@ public class ApiRequest {
         HttpEntity<String> request = new HttpEntity<>(new RequestWrapper().wrap(prompt), headers);
         ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_URL, request, String.class);
         return response.getBody();
+    }
+
+    public String getApiKey(){
+        return this.apiKey;
     }
 }

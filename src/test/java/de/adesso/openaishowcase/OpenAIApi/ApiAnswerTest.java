@@ -20,6 +20,11 @@ public class ApiAnswerTest {
 
 
     @Test
+    public void getApiKeyTest(){
+        logger.info(new ApiRequest().getApiKey());
+    }
+
+    @Test
     public void should_return_id_attribute_of_JSONString_de() throws JsonProcessingException {
 
         String prompt_de = "Kategorisiere die Worte in folgendem Satz: AM Sonntag um 11 Uhr springt der quirrlige Fuchs über den faulen Hund.";
