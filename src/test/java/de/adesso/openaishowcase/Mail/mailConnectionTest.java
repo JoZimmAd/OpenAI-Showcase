@@ -1,5 +1,6 @@
 package de.adesso.openaishowcase.Mail;
 
+import jakarta.mail.AuthenticationFailedException;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.AfterEach;
@@ -12,6 +13,7 @@ import org.springframework.util.Assert;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.util.Assert.isNull;
 import static org.springframework.util.Assert.isTrue;
 
@@ -26,17 +28,32 @@ public class mailConnectionTest {
 
     @Test
     public void should_Return_NotAuthorized(){
-        //TODO
+        Exception exception = assertThrows(AuthenticationFailedException.class, () -> {
+            con.connect("Wrong","Login");
+        });
     }
 
     @Test
     public void getAllMessages_Should_Return_All_Messages() throws MessagingException {
-        con.setAuth("openaishowcase@gmx.de","DummyPass");
+        con.connect("openaishowcase@gmx.de","DummyPass");
         List<Message> messageLst = con.getAllMessages();
         isTrue(!messageLst.isEmpty(), "messageList is empty");
+
         for (Message m : messageLst) {
             logger.info("Message: " + m.getSubject());
         }
+    }
+
+    @Test
+    public void close_Test() throws MessagingException {
+        con.connect("openaishowcase@gmx.de","DummyPass");
+        List<Message> messageLst = con.getAllMessages();
+        isTrue(!messageLst.isEmpty(), "messageList is empty");
+        con.close();
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
+            con.getAllMessages();
+        });
+
     }
 
     @BeforeEach

@@ -20,12 +20,12 @@ public class scanController {
     @Autowired
     MailConnection con;
     @PostMapping("/scan")
-    public void doPost(HttpServletRequest request, HttpServletResponse respnose) throws MessagingException {
-        con.setAuth(request.getParameter("email"),request.getParameter("password"));
+    public void doPost(HttpServletRequest request) throws MessagingException {
+        con.connect(request.getParameter("email"),request.getParameter("password"));
         List<Message> messages = con.getAllMessages();
         for (Message m: messages){
             logger.info("Message: " + m.getSubject());
         }
-        //TODO close connection
+        con.close();
     }
 }
