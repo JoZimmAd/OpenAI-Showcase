@@ -17,12 +17,12 @@ public class Mail {
     private Long id;
 
     @Column
-    private Category category;
+    private String category;
     @Column
     private Timestamp timestamp;
     @Column
-    private String from;
+    private String from_person;
     @Column
-    private String to;
+    private String to_person;
 
 }
