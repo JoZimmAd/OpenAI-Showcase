@@ -19,14 +19,15 @@ public class MailConnection {
     private Properties properties = new Properties();
     private Session mailSession;
     private Store store;
+
     @Autowired
-    public MailConnection() throws MessagingException {
+    public MailConnection(){
         properties.put("mail.imap.ssl.enable", "true");
-        mailSession = Session.getInstance(properties,null);
-        store = mailSession.getStore("imap");
+        mailSession = Session.getInstance(properties, null);
     }
 
-    public void connect(String user, String pass) throws MessagingException {
+    public void connect(String host,String user, String pass) throws MessagingException {
+        store = mailSession.getStore("imap");
         store.connect(host,user,pass);
     }
 
@@ -40,6 +41,10 @@ public class MailConnection {
 
     public void close() throws MessagingException {
         store.close();
+    }
+
+    public String getHost(){
+        return host;
     }
 
 }

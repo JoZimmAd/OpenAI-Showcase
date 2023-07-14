@@ -1,6 +1,5 @@
 package de.adesso.openaishowcase.Mail;
 
-import de.adesso.openaishowcase.OpenAIApi.ApiRequest;
 import de.adesso.openaishowcase.Utils.MailUtils;
 import jakarta.mail.AuthenticationFailedException;
 import jakarta.mail.Message;
@@ -28,13 +27,13 @@ public class mailConnectionTest {
     @Test
     public void should_Return_NotAuthorized(){
         Exception exception = assertThrows(AuthenticationFailedException.class, () -> {
-            con.connect("Wrong","Login");
+            con.connect("imap.gmx.com","Wrong","Login");
         });
     }
 
     @Test
     public void getAllMessages_Should_Return_All_Messages() throws Exception {
-        con.connect("openaishowcase@gmx.de","DummyPass");
+        con.connect("imap.gmx.com","openaishowcase@gmx.de","DummyPass");
         List<Message> messageLst = con.getAllMessages();
         isTrue(!messageLst.isEmpty(), "messageList is empty");
 
@@ -46,7 +45,7 @@ public class mailConnectionTest {
 
     @Test
     public void close_Test() throws MessagingException {
-        con.connect("openaishowcase@gmx.de","DummyPass");
+        con.connect("imap.gmx.com","openaishowcase@gmx.de","DummyPass");
         List<Message> messageLst = con.getAllMessages();
         isTrue(!messageLst.isEmpty(), "messageList is empty");
         con.close();
