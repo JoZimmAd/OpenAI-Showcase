@@ -1,12 +1,12 @@
 package de.adesso.openaishowcase.Models;
 
-import de.adesso.openaishowcase.Enums.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import org.springframework.data.annotation.Id;
 
-import java.sql.Timestamp;
+import java.util.Date;
+
 
 @Entity
 public class Mail {
@@ -19,10 +19,21 @@ public class Mail {
     @Column
     private String category;
     @Column
-    private Timestamp timestamp;
+    private Date timestamp;
     @Column
     private String from_person;
     @Column
     private String to_person;
+
+    public Mail(String from_person, String to_person, Date date, String category){
+        this.category = category;
+        this.timestamp = date;
+        this.from_person = from_person;
+        this.to_person = to_person;
+    }
+
+    public Mail(){
+
+    }
 
 }

@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.adesso.openaishowcase.Enums.Category;
 import de.adesso.openaishowcase.Mail.MailConnection;
 import de.adesso.openaishowcase.Models.Mail;
+import de.adesso.openaishowcase.Repositories.MailRepository;
 import de.adesso.openaishowcase.Utils.MailUtils;
 import de.adesso.openaishowcase.Utils.StringUtils;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import org.apache.tomcat.util.json.ParseException;
+import org.apache.xalan.res.XSLTErrorResources_en;
 import org.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +37,9 @@ public class ApiRequestTest {
 
     @Autowired
     private MailConnection con;
+
+    @Autowired
+    private MailRepository mailRepository;
 
     @Test
     public void askQuestion_Should_Not_Be_Empty_de() throws JSONException, ParseException {
@@ -169,14 +174,19 @@ public class ApiRequestTest {
         List<Message> messageList = con.getAllMessages();
         List<Category> enumValues = new ArrayList<Category>(EnumSet.allOf(Category.class));
 
-        String prompt = "Kategorisiere folgende E-Mail nach den Kategorien " + enumValues.toString() + getTextFromMessage(messageList.get(6));
-        prompt = MailUtils.replaceLineBreaks(prompt);
-        logger.info("Message Body: " + prompt);
-        String answerstring = apiRequest.askQuestion(prompt);
-        ApiAnswer answer = new ObjectMapper().readValue(answerstring, ApiAnswer.class);
-        String returnedAnswer = answer.getChoices()[0].getMessage().getAnswer();
-        logger.info("Antwort: " + returnedAnswer);
+        for (Message m : messageList){
+            String prompt = "Kategorisiere folgende E-Mail nach den Kategorien " + enumValues.toString() + " " + getTextFromMessage(m);
+            prompt = MailUtils.replaceLineBreaks(prompt);
+            logger.info("Message Body: " + prompt);
+            String answerString = apiRequest.askQuestion(prompt);
+            ApiAnswer answer = new ObjectMapper().readValue(answerString, ApiAnswer.class);
+            String returnedAnswer = answer.getChoices()[0].getMessage().getAnswer();
+            mailRepository.save(new Mail(m.getFrom().toString(),m.getAllRecipients().toString(), m.getSentDate() ,returnedAnswer));
+            logger.info("Answer: " + returnedAnswer);
+            Thread.sleep(21000);
+        }
         con.close();
+        logger.info("Repo: " + mailRepository.findAll());
     }
 
     @BeforeEach
