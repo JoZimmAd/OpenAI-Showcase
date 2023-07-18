@@ -2,7 +2,13 @@ package de.adesso.openaishowcase.OpenAIApi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.adesso.openaishowcase.Enums.Category;
+import de.adesso.openaishowcase.Mail.MailConnection;
+import de.adesso.openaishowcase.Models.Mail;
+import de.adesso.openaishowcase.Utils.MailUtils;
 import de.adesso.openaishowcase.Utils.StringUtils;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
 import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
@@ -11,8 +17,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.logging.Logger;
 
+import static de.adesso.openaishowcase.Utils.MailUtils.getTextFromMessage;
 import static org.springframework.util.Assert.isTrue;
 
 @SpringBootTest
@@ -22,6 +32,9 @@ public class ApiRequestTest {
 
     @Autowired
     private ApiRequest apiRequest;
+
+    @Autowired
+    private MailConnection con;
 
     @Test
     public void askQuestion_Should_Not_Be_Empty_de() throws JSONException, ParseException {
@@ -42,7 +55,7 @@ public class ApiRequestTest {
     }
 
     @Test
-    public void askQuestion_Should_Return_Positive_EMail_de() throws JSONException, ParseException, JsonProcessingException {
+    public void askQuestion_Should_Return_Positive_EMail_de() throws JsonProcessingException {
         String prompt_de = "Ist der folgende Text negativ, positiv oder neutral? Das Ergebnis ist sehr gut";
 
         String answerstring = apiRequest.askQuestion(prompt_de);
@@ -51,7 +64,7 @@ public class ApiRequestTest {
         isTrue(answer.getChoices()[0].getMessage().getAnswer().equals("Positiv."),"Answer was false categorized");
     }
     @Test
-    public void askQuestion_Should_Return_Positive_EMail_en() throws JSONException, ParseException, JsonProcessingException {
+    public void askQuestion_Should_Return_Positive_EMail_en() throws JsonProcessingException {
         String prompt_en = "Is the following text negative, positive or neutral? The result is very good";
 
         String answerstring = apiRequest.askQuestion(prompt_en);
@@ -61,7 +74,7 @@ public class ApiRequestTest {
     }
 
     @Test
-    public void askQuestion_Should_Return_Neutral_EMail_de() throws JSONException, ParseException, JsonProcessingException {
+    public void askQuestion_Should_Return_Neutral_EMail_de() throws JsonProcessingException {
         String prompt_de = "Ist der folgende Text negativ, positiv oder neutral? Das Ergebnis ist ok";
 
         String answerstring = apiRequest.askQuestion(prompt_de);
@@ -147,7 +160,23 @@ public class ApiRequestTest {
         logger.info("Antwort mit Satzzeichenentfernung: " + returnedAnswer2);
 
         isTrue(returnedAnswer.equals(returnedAnswer2),"Antworten stimmen nicht überein");
+    }
 
+    @Test
+    public void askQuestion_Should_Return_Categorized_Response() throws Exception {
+
+        con.connect("imap.gmx.com","openaishowcase@gmx.de","DummyPass");
+        List<Message> messageList = con.getAllMessages();
+        List<Category> enumValues = new ArrayList<Category>(EnumSet.allOf(Category.class));
+
+        String prompt = "Kategorisiere folgende E-Mail nach den Kategorien " + enumValues.toString() + getTextFromMessage(messageList.get(6));
+        prompt = MailUtils.replaceLineBreaks(prompt);
+        logger.info("Message Body: " + prompt);
+        String answerstring = apiRequest.askQuestion(prompt);
+        ApiAnswer answer = new ObjectMapper().readValue(answerstring, ApiAnswer.class);
+        String returnedAnswer = answer.getChoices()[0].getMessage().getAnswer();
+        logger.info("Antwort: " + returnedAnswer);
+        con.close();
     }
 
     @BeforeEach

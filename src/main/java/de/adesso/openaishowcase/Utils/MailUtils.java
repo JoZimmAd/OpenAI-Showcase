@@ -35,4 +35,8 @@ public class MailUtils {
         }
         return result;
     }
+
+    public static String replaceLineBreaks(String prompt){
+        return prompt.replace("\n","").replace("\r","");
+    }
 }

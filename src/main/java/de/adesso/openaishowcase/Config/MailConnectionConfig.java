@@ -8,13 +8,16 @@ import org.springframework.context.annotation.Configuration;
 public class MailConnectionConfig {
 
     @Value("${mail.imap.host}")
-    private String host;
+    String host;
 
     @Value("${mail.imap.user}")
-    private String user;
+    String user;
 
     @Value("${mail.imap.password}")
-    private String password;
+    String password;
+
+    @Value("${API.key}")
+    String apiKey;
 
     @Bean
     public String host(){return this.host;}
@@ -24,4 +27,7 @@ public class MailConnectionConfig {
 
     @Bean
     public String password(){return this.password;}
+
+    @Bean
+    public String apiKey(){return this.apiKey;}
 }

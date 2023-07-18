@@ -2,11 +2,13 @@ package de.adesso.openaishowcase.Enums;
 
 public enum Category {
 
-    BIRTHDAY,
-    NEWSLETTER;
+    EINLADUNG,
+    ANGEBOT,
+    AUFTRAGSBESTÄTIGUNG,
+    MEETING,
+    WERBUNG,
+    ABWESENHEIT,
+    NEWSLETTER,
+    SONSTIGES;
 
-    public String toString(){
-        //TODO
-        return null;
-    }
 }

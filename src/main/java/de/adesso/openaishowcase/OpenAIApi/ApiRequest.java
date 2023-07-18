@@ -10,7 +10,7 @@ public class ApiRequest {
     private static final String OPENAI_URL = "https://api.openai.com/v1/chat/completions";
 
     @Value("${API.key}")
-    private String apiKey;
+    String apiKey;
 
 
     private final RestTemplate restTemplate = new RestTemplate();
@@ -20,6 +20,7 @@ public class ApiRequest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + apiKey);
         HttpEntity<String> request = new HttpEntity<>(new RequestWrapper().wrap(prompt), headers);
+        System.out.println(request);
         ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_URL, request, String.class);
         return response.getBody();
     }
