@@ -1,4 +1,4 @@
-package de.adesso.openaishowcase.Controller;
+package de.adesso.openaishowcase.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.adesso.openaishowcase.Enums.Category;
@@ -11,6 +11,7 @@ import de.adesso.openaishowcase.Utils.MailUtils;
 import jakarta.mail.Message;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,12 @@ public class ScanController {
     private final ApiRequest apiRequest;
     private final MailRepository mailRepository;
 
+    @Value("${mail.imap.user}")
+    private String clientEmail;
+
+    @Value("${mail.imap.password}")
+    private String clientPassword;
+
     @RequestMapping("/")
     public String index(Model model) {
         model.addAttribute("mailList", mailRepository.findAll());
@@ -46,7 +53,7 @@ public class ScanController {
 
     @PostMapping("/scan")
     public void scan(HttpServletRequest request) throws Exception {
-        con.connect("imap.gmx.com", request.getParameter("email"), request.getParameter("password"));
+        con.connect("imap.gmx.com", clientEmail, clientPassword);
 
         List<Message> messageList = con.getAllMessages();
 
@@ -58,7 +65,6 @@ public class ScanController {
             String returnedAnswer = answer.getChoices()[0].getMessage().getAnswer();
             mailRepository.save(new Mail(m.getFrom().toString(), m.getAllRecipients().toString(), m.getSentDate(), returnedAnswer));
         }
-
         con.close();
     }
 }

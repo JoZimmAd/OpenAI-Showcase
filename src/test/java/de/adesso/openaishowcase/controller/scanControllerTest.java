@@ -1,4 +1,4 @@
-package de.adesso.openaishowcase.Controller;
+package de.adesso.openaishowcase.controller;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +43,7 @@ public class scanControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(scanController).build();
 
         MvcResult result = mockMvc.perform(post("/scan")
-                        .param("email","openaishowcase@gmx.de")
+                        .param("email", "openaishowcase@gmx.de")
                         .param("password", "DummyPass")
                 ).andExpect(status().isOk())
                 .andReturn();
