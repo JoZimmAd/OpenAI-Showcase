@@ -1,0 +1,40 @@
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>OpenAI - Showcase</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<form method="post" action="/scan">
+    <input type="text" name="email" placeholder="openaishowcase@gmx.de"/>
+    <input type="password" name="password" placeholder="DummyPass"/>
+    <button type="submit" name="submit">Scan</button>
+</form>
+</body>
+<body>
+<div class="container my-2" align="center">
+
+    <h3>Kategorisierte Mails</h3>
+<!--    <a th:href="@{/addnew}" class="btn btn-primary btn-sm mb-3" >Add Employee</a>-->
+    <table style="width:80%" border="1"
+           class = "table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th>Kategorie</th>
+            <th>Datum</th>
+            <th>Absender</th>
+            <th>Betreff</th>
+            <th>Stimmung</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="mail:${mailList}">
+            <td th:text="${mail.getCategory()}"></td>
+            <td th:text="${mail.getTimestamp()}"></td>
+            <td th:text="${mail.getFrom_person()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

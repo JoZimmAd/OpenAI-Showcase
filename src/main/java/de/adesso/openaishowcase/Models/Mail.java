@@ -36,4 +36,43 @@ public class Mail {
 
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getFrom_person() {
+        return from_person;
+    }
+
+    public void setFrom_person(String from_person) {
+        this.from_person = from_person;
+    }
+
+    public String getTo_person() {
+        return to_person;
+    }
+
+    public void setTo_person(String to_person) {
+        this.to_person = to_person;
+    }
 }

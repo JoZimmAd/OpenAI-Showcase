@@ -23,7 +23,7 @@ public class scanControllerTest {
     MockMvc mockMvc;
 
     @InjectMocks
-    scanController scanController;
+    ScanController scanController;
 
     @BeforeEach
     public void setUp() {
