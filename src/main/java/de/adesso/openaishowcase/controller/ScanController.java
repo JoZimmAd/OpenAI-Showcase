@@ -14,9 +14,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -41,6 +45,19 @@ public class ScanController {
     @Autowired
     private MailRepository mailRepository;
 
+
+    @RequestMapping("/")
+    public String index(Model model) {
+        model.addAttribute("mailList", mailRepository.findAll());
+        return "index";
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView messages() {
+        ModelAndView mav = new ModelAndView("index");
+        mav.addObject("mailList", mailRepository.findAll());
+        return mav;
+    }
 
     @GetMapping("/fetch")
     @Async

@@ -1,4 +1,4 @@
-package de.adesso.openaishowcase.Controller;
+package de.adesso.openaishowcase.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
