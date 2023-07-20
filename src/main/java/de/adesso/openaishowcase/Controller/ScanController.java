@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.logging.Logger;
 
 import static de.adesso.openaishowcase.Utils.MailUtils.getTextFromMessage;
@@ -46,20 +48,12 @@ public class ScanController {
     @Autowired
     private MailRepository mailRepository;
 
-
-    @RequestMapping("/")
-    public String getAll(Model model) {
-        model.addAttribute("mailList", mailRepository.findAll());
-        return "mails";
-    }
-
-
     @ModelAttribute("mailList")
     public List<Mail> mails() {
         return mailRepository.findAll();
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/mails", method = RequestMethod.GET)
     public ModelAndView mailsModelAndView() {
         ModelAndView mav = new ModelAndView("mails");
         mav.addObject("mailList", mailRepository.findAll());
@@ -67,35 +61,36 @@ public class ScanController {
     }
 
     @GetMapping("/fetch")
-    @Async
-    public void fetchMails(@Value("${mail.imap.user}") String email,
-                           @Value("${mail.imap.password}") String password,
-                           @Value("${mail.imap.host}") String host) throws Exception {
+//    @Async
+    public String fetchMails(@Value("${mail.imap.user}") String email,
+                                     @Value("${mail.imap.password}") String password,
+                                     @Value("${mail.imap.host}") String host) throws Exception {
 
         //Establish connection to mailserver
         connection = new MailConnection();
-        connection.connect(host,email,password);
+        connection.connect(host, email, password);
 
         //Fetch all messages and update in database
         List<Message> messageList = connection.getAllMessages();
-        for (Message m : messageList){
+        for (Message m : messageList) {
             Mail mail = new Mail(m.getFrom().toString(), m.getAllRecipients().toString(), m.getSentDate(), getTextFromMessage(m));
             mailRepository.save(mail);
         }
         LOGGER.info("Fetched all Mails and updated them in the database");
         connection.close();
+        return "redirect:mails";
     }
 
     @PostMapping("/scan")
-    @Async
-    public void scanMails() throws JsonProcessingException, InterruptedException {
+//    @Async
+    public String scanMails() throws JsonProcessingException, InterruptedException {
         String prompt = StringUtils.EMPTY;
         String answerString = StringUtils.EMPTY;
 
         //Send all uncategorized mails to OpenAI
         //Insert new categorized mails in database
         for (Mail m : mailRepository.findAllUncategorized()) {
-            LOGGER.info(String.format("Categorizing mail: %s",m.getText()));
+            LOGGER.info(String.format("Categorizing mail: %s", m.getText()));
             prompt = String.format("Kategorisiere folgende E-Mail nach den Kategorien %s %s", CATEGORIES.toString(), m.getText());
             prompt = MailUtils.replaceLineBreaks(prompt);
             answerString = apiRequest.askQuestion(prompt);
@@ -103,9 +98,10 @@ public class ScanController {
             String returnedAnswer = Category.validate(answer.getChoices()[0].getMessage().getAnswer());
             m.setCategory(Category.validate(returnedAnswer));
             mailRepository.save(m);
-            LOGGER.info(String.format("Category is: %s",returnedAnswer));
+            LOGGER.info(String.format("Category is: %s", returnedAnswer));
             LOGGER.info("Sleeping for 21s...");
-            Thread.sleep(21000);
+            Thread.sleep(2100);
         }
+        return "redirect:mails";
     }
 }
