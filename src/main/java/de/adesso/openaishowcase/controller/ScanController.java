@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +30,7 @@ import java.util.logging.Logger;
 
 import static de.adesso.openaishowcase.Utils.MailUtils.getTextFromMessage;
 
-@RestController
+@Controller
 public class ScanController {
 
     public static final List<Category> CATEGORIES = new ArrayList<Category>(EnumSet.allOf(Category.class));
