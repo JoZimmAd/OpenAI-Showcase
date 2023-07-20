@@ -19,9 +19,9 @@
         </thead>
         <tbody>
         <tr th:each="mail:${mailList}">
-            <td th:text="${mail.getCategory()}"></td>
-            <td th:text="${mail.getFrom_person()}"></td>
-            <td th:text="${mail.getTimestamp()}"></td>
+            <td th:text="${mail.category}"></td>
+            <td th:text="${mail.from_person}"></td>
+            <td th:text="${mail.timestamp}"></td>
         </tr>
         </tbody>
     </table>

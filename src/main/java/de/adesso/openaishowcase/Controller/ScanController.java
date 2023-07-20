@@ -17,6 +17,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,14 +48,20 @@ public class ScanController {
 
 
     @RequestMapping("/")
-    public String index(Model model) {
+    public String getAll(Model model) {
         model.addAttribute("mailList", mailRepository.findAll());
-        return "index";
+        return "mails";
+    }
+
+
+    @ModelAttribute("mailList")
+    public List<Mail> mails() {
+        return mailRepository.findAll();
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView messages() {
-        ModelAndView mav = new ModelAndView("index");
+    public ModelAndView mailsModelAndView() {
+        ModelAndView mav = new ModelAndView("mails");
         mav.addObject("mailList", mailRepository.findAll());
         return mav;
     }
