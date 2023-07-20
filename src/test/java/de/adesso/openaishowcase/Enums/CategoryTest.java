@@ -10,28 +10,37 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static org.springframework.test.util.AssertionErrors.assertTrue;
+
 @SpringBootTest
 public class CategoryTest {
 
     private long startTime;
-    private final Logger logger = Logger.getLogger("Logger");
+    private static final Logger LOGGER = Logger.getLogger(CategoryTest.class.getName());
 
     @BeforeEach
     public void setUp(){
-        logger.info("Starting Tests");
+        LOGGER.info("Starting Tests");
         startTime = System.nanoTime();
     }
 
     @AfterEach
     public void shutDown(){
         long endTime = System.nanoTime();
-        logger.info("Ausführungszeit: " + (endTime-startTime)/1000000 + "ms");
-        logger.info("*******");
+        LOGGER.info("Ausführungszeit: " + (endTime-startTime)/1000000 + "ms");
+        LOGGER.info("*******");
     }
 
     @Test
     public void getCategoriesAsString_Test(){
         List<Category> enumValues = new ArrayList<Category>(EnumSet.allOf(Category.class));
-        logger.info(enumValues.toString());
+        LOGGER.info(enumValues.toString());
+    }
+
+    @Test
+    public void validate_Test(){
+        String answer = "Kategorie: NEWSLETTER";
+        LOGGER.info(String.format("Category after validation: %s",Category.validate(answer)));
+        assertTrue("",Category.validate(answer).equals("NEWSLETTER"));
     }
 }

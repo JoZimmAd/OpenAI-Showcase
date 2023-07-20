@@ -182,9 +182,10 @@ public class ApiRequestTest {
             ApiAnswer answer = new ObjectMapper().readValue(answerString, ApiAnswer.class);
             String returnedAnswer = answer.getChoices()[0].getMessage().getAnswer();
             Mail mail = new Mail(m.getFrom().toString(), m.getAllRecipients().toString(), m.getSentDate(), getTextFromMessage(m));
-            mail.setCategory(returnedAnswer);
+            String validatedAnswer = Category.validate(returnedAnswer);
+            mail.setCategory(validatedAnswer);
             mailRepository.save(mail);
-            logger.info("Answer: " + returnedAnswer);
+            logger.info("Answer: " + validatedAnswer);
             Thread.sleep(21000);
         }
         con.close();
