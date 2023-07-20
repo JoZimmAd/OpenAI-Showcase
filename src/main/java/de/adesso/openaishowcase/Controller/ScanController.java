@@ -93,7 +93,14 @@ public class ScanController {
 
         //Send all uncategorized mails to OpenAI
         //Insert new categorized mails in database
-        for (Mail m : mailRepository.findAllUncategorized()) {
+        List<Mail> persistedMails = mailRepository.findAllUncategorized();
+
+        int counter = 0;
+        for (Mail m : persistedMails) {
+            if (counter >= 2) {
+                Thread.sleep(21000);
+                LOGGER.info("Sleeping for 21s...");
+            }
             LOGGER.info(String.format("Categorizing mail: %s", m.getText()));
             prompt = String.format("Kategorisiere folgende E-Mail nach den Kategorien %s %s", CATEGORIES.toString(), m.getText());
             prompt = MailUtils.replaceLineBreaks(prompt);
@@ -103,8 +110,9 @@ public class ScanController {
             m.setCategory(Category.validate(returnedAnswer));
             mailRepository.save(m);
             LOGGER.info(String.format("Category is: %s", returnedAnswer));
-            LOGGER.info("Sleeping for 21s...");
-            Thread.sleep(2100);
+
+            counter++;
+
         }
         return "redirect:mails";
     }
