@@ -41,7 +41,7 @@ public class ScanController {
     private MailRepository mailRepository;
 
 
-    @GetMapping("/scan")
+    @GetMapping("/fetch")
     public void fetchMails(@Value("${mail.imap.user}") String email,
                              @Value("${mail.imap.password}") String password,
                              @Value("${mail.imap.host}") String host) throws Exception {
