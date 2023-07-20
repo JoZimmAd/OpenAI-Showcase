@@ -9,6 +9,9 @@ public enum Category {
     WERBUNG,
     ABWESENHEIT,
     NEWSLETTER,
+    FRAGE,
+    ESKALATION,
+    STATUS,
     SONSTIGES;
 
 }

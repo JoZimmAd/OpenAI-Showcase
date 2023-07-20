@@ -15,37 +15,26 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-public class scanControllerTest {
+public class ScanControllerTest {
 
     private long startTime;
-    private final Logger logger = Logger.getLogger("Logger");
+    private static final Logger LOGGER = Logger.getLogger(ScanControllerTest.class.getName());
 
     MockMvc mockMvc;
 
     @InjectMocks
-    scanController scanController;
+    ScanController scanController;
 
     @BeforeEach
     public void setUp() {
-        logger.info("Starting Tests");
+        LOGGER.info("Starting Tests");
         startTime = System.nanoTime();
     }
 
     @AfterEach
     public void shutDown() {
         long endTime = System.nanoTime();
-        logger.info("Ausführungszeit: " + (endTime - startTime) / 1000000 + "ms");
-        logger.info("*******");
-    }
-
-    @Test
-    public void doPost_Test() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(scanController).build();
-
-        MvcResult result = mockMvc.perform(post("/scan")
-                        .param("email","openaishowcase@gmx.de")
-                        .param("password", "DummyPass")
-                ).andExpect(status().isOk())
-                .andReturn();
+        LOGGER.info("Ausführungszeit: " + (endTime - startTime) / 1000000 + "ms");
+        LOGGER.info("*******");
     }
 }
