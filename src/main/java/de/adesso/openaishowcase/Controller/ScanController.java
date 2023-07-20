@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
 
@@ -63,8 +64,8 @@ public class ScanController {
     @GetMapping("/fetch")
 //    @Async
     public String fetchMails(@Value("${mail.imap.user}") String email,
-                                     @Value("${mail.imap.password}") String password,
-                                     @Value("${mail.imap.host}") String host) throws Exception {
+                             @Value("${mail.imap.password}") String password,
+                             @Value("${mail.imap.host}") String host) throws Exception {
 
         //Establish connection to mailserver
         connection = new MailConnection();
@@ -74,7 +75,10 @@ public class ScanController {
         List<Message> messageList = connection.getAllMessages();
         for (Message m : messageList) {
             Mail mail = new Mail(m.getFrom().toString(), m.getAllRecipients().toString(), m.getSentDate(), getTextFromMessage(m));
-            mailRepository.save(mail);
+            Optional<Mail> persisted = mailRepository.findByTimestamp(mail.getTimestamp());
+            if (persisted.isEmpty()) {
+                mailRepository.save(mail);
+            }
         }
         LOGGER.info("Fetched all Mails and updated them in the database");
         connection.close();
