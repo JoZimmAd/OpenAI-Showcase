@@ -13,6 +13,7 @@ import jakarta.mail.Message;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,6 +43,7 @@ public class ScanController {
 
 
     @GetMapping("/fetch")
+    @Async
     public void fetchMails(@Value("${mail.imap.user}") String email,
                              @Value("${mail.imap.password}") String password,
                              @Value("${mail.imap.host}") String host) throws Exception {
@@ -61,6 +63,7 @@ public class ScanController {
     }
 
     @PostMapping("/scan")
+    @Async
     public void scanMails() throws JsonProcessingException, InterruptedException {
         String prompt = StringUtils.EMPTY;
         String answerString = StringUtils.EMPTY;
