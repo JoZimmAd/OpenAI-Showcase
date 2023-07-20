@@ -76,8 +76,8 @@ public class ScanController {
             prompt = MailUtils.replaceLineBreaks(prompt);
             answerString = apiRequest.askQuestion(prompt);
             ApiAnswer answer = new ObjectMapper().readValue(answerString, ApiAnswer.class);
-            String returnedAnswer = answer.getChoices()[0].getMessage().getAnswer();
-            m.setCategory(returnedAnswer);
+            String returnedAnswer = Category.validate(answer.getChoices()[0].getMessage().getAnswer());
+            m.setCategory(Category.validate(returnedAnswer));
             mailRepository.save(m);
             LOGGER.info(String.format("Category is: %s",returnedAnswer));
             LOGGER.info("Sleeping for 21s...");
