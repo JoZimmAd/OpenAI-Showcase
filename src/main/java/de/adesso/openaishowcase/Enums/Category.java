@@ -9,6 +9,19 @@ public enum Category {
     WERBUNG,
     ABWESENHEIT,
     NEWSLETTER,
+    FRAGE,
+    ESKALATION,
+    STATUS,
     SONSTIGES;
+
+    public static String validate(String answer){
+
+        for (Category c : Category.values()){
+            if (answer.contains(c.name())){
+                return c.name();
+            }
+        }
+        return SONSTIGES.name();
+    }
 
 }

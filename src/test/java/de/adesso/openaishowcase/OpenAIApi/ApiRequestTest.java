@@ -181,13 +181,17 @@ public class ApiRequestTest {
             String answerString = apiRequest.askQuestion(prompt);
             ApiAnswer answer = new ObjectMapper().readValue(answerString, ApiAnswer.class);
             String returnedAnswer = answer.getChoices()[0].getMessage().getAnswer();
-            mailRepository.save(new Mail(m.getFrom().toString(),m.getAllRecipients().toString(), m.getSentDate() ,returnedAnswer));
-            logger.info("Answer: " + returnedAnswer);
+            Mail mail = new Mail(m.getFrom().toString(), m.getAllRecipients().toString(), m.getSentDate(), getTextFromMessage(m));
+            String validatedAnswer = Category.validate(returnedAnswer);
+            mail.setCategory(validatedAnswer);
+            mailRepository.save(mail);
+            logger.info("Answer: " + validatedAnswer);
             Thread.sleep(21000);
         }
         con.close();
         logger.info("Repo: " + mailRepository.findAll());
     }
+
 
     @BeforeEach
     public void setUp(){
