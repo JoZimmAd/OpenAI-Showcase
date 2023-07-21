@@ -96,7 +96,7 @@ public class ScanController {
         return "redirect:mails";
     }
 
-    @PostMapping("/scan/{id}")
+    @GetMapping("/scan/{id}")
     public String scanSingleMail(@PathVariable Long id) throws JsonProcessingException, InterruptedException {
         String prompt = StringUtils.EMPTY;
         String answerString = StringUtils.EMPTY;
@@ -120,9 +120,8 @@ public class ScanController {
             mailRes.setCategory(Category.validate(Category.validate(answer.getChoices()[0].getMessage().getAnswer())));
             mailRes.setMood(Mood.validate(Mood.validate(answer.getChoices()[0].getMessage().getAnswer())));
             mailRepository.save(mailRes);
-            return "redirect:mails";
+            return "redirect:/mails";
         }
-
         return "redirect:mails";
     }
 

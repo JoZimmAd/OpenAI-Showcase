@@ -33,7 +33,7 @@
         <tr th:each="mail:${mailList}">
             <td th:text="${mail.timestamp}"></td>
             <td th:if="${mail.category} == null">
-                <form th:action="@{/scan/{id}(id=${mail.id})}" method="post" id="categorize">
+                <form th:action="@{/scan/{id}(id=${mail.id})}" method="get" id="categorize">
                     <button>Kategorisieren</button>
                 </form>
             </td>
