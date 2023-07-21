@@ -55,20 +55,10 @@ public class ScanController {
         return mailRepository.findAll();
     }
 
-//    @ModelAttribute("mail")
-//    public Mail mail() {
-//        List<Mail> mails = mailRepository.findAll();
-//        if (mails.get(0) != null) {
-//            return mails.get(0);
-//        }
-//        return null;
-//    }
-
     @RequestMapping(value = "/mails", method = RequestMethod.GET)
     public ModelAndView mailsModelAndView(Mail mail) {
         ModelAndView mav = new ModelAndView("mails");
         mav.addObject("mailList", mailRepository.findAll());
-        mav.addObject("mail", mail);
         return mav;
     }
 
@@ -122,7 +112,7 @@ public class ScanController {
             mailRepository.save(mailRes);
             return "redirect:/mails";
         }
-        return "redirect:mails";
+        return "redirect:/mails";
     }
 
     @PostMapping("/scan")
@@ -158,7 +148,6 @@ public class ScanController {
             m.setMood(Mood.validate(mood));
             mailRepository.save(m);
             counter++;
-
         }
         return "redirect:mails";
     }

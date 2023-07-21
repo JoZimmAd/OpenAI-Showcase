@@ -25,21 +25,26 @@
             <th>Datum</th>
             <th>Kategorie</th>
             <th>Stimmung</th>
-            <th>Absender</th>
             <th>Betreff</th>
+            <th>Absender</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="mail:${mailList}">
             <td th:text="${mail.timestamp}"></td>
-            <td th:if="${mail.category} == null">
-                <form th:action="@{/scan/{id}(id=${mail.id})}" method="get" id="categorize">
-                    <button>Kategorisieren</button>
-                </form>
+            <td>
+                <div th:if="${mail.category} == null">
+                    <form th:action="@{/scan/{id}(id=${mail.id})}" method="get">
+                        <button>Kategorisieren</button>
+                    </form>
+                </div>
+                <div th:else>
+                    <div th:text="${mail.category}"></div>
+                </div>
             </td>
             <td th:text="${mail.mood}"></td>
-            <td th:text="${mail.from_person}"></td>
             <td th:text="${mail.sentiment}"></td>
+            <td th:text="${mail.from_person}"></td>
         </tr>
         </tbody>
     </table>
