@@ -24,8 +24,9 @@ public class Mail {
     private String from_person;
     @Column
     private String to_person;
+
     @Column
-    private String sentiment;
+    private String subject;
 
     @Column(length = 4000)
     private String text;
@@ -33,11 +34,12 @@ public class Mail {
     @Column()
     private String mood;
 
-    public Mail(String from_person, String to_person, Date date, String text){
+    public Mail(String from_person, String to_person, Date date, String text, String subject){
         this.timestamp = date;
         this.from_person = from_person;
         this.to_person = to_person;
         this.text = text;
+        this.subject = subject;
     }
 
     public Mail(){
@@ -96,15 +98,15 @@ public class Mail {
         this.mood = mood;
     }
 
-    public String getSentiment() {
-        return sentiment;
-    }
-
-    public void setSentiment(String sentiment) {
-        this.sentiment = sentiment;
-    }
-
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 }

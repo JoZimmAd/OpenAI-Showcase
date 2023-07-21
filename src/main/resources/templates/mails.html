@@ -31,6 +31,7 @@
             <th>Stimmung</th>
             <th>Betreff</th>
             <th>Absender</th>
+            <th>Inhalt</th>
         </tr>
         </thead>
         <tbody>
@@ -47,8 +48,15 @@
                 </div>
             </td>
             <td th:text="${mail.mood}"></td>
-            <td th:text="${mail.sentiment}"></td>
+            <td th:text="${mail.subject}"></td>
             <td th:text="${mail.from_person}"></td>
+            <td>
+                <div>
+                    <form th:action="@{/scan/{id}(id=${mail.id})}" method="get">
+                        <button>Anzeigen</button>
+                    </form>
+                </div>
+            </td>
         </tr>
         </tbody>
     </table>

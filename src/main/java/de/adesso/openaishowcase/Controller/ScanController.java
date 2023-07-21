@@ -73,7 +73,11 @@ public class ScanController {
         //Fetch all messages and update in database
         List<Message> messageList = connection.getAllMessages();
         for (Message m : messageList) {
-            Mail mail = new Mail(m.getFrom().toString(), m.getAllRecipients().toString(), m.getSentDate(), getTextFromMessage(m));
+            Mail mail = new Mail(m.getFrom()[0].toString(),
+                    m.getAllRecipients()[0].toString(),
+                    m.getSentDate(),
+                    getTextFromMessage(m),
+                    m.getSubject());
             Optional<Mail> persisted = mailRepository.findByTimestamp(mail.getTimestamp());
             if (persisted.isEmpty()) {
                 mailRepository.save(mail);
