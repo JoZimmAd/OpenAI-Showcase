@@ -34,7 +34,7 @@
             <td th:text="${mail.timestamp}"></td>
             <td th:if="${mail.category} == null">
                 <form th:action="@{/scan/{id}(id=${mail.id})}" method="post" id="categorize">
-                    <button th:onclick="sendRequest(mail.id)">Kategorisieren</button>
+                    <button>Kategorisieren</button>
                 </form>
             </td>
             <td th:text="${mail.mood}"></td>
@@ -44,26 +44,4 @@
         </tbody>
     </table>
 </div>
-
-<script th:inline="javascript">
-    function sendRequest(mailId) {
-        document.getElementById("categorize").addEventListener("submit", function(event) {
-            // Prevent the default form submission behavior
-            event.preventDefault();
-            console.log(mailId)
-
-            // Get the mailId from your desired source (e.g., input field, JavaScript variable, etc.)
-            let id = mailId; // Replace with the actual mail ID value
-
-            // Update the form's action attribute with the mailId
-            let form = event.target;
-            form.action = form.action.replace("{id}", id);
-
-            // Submit the form
-            form.submit();
-        });
-    }
-</script>
-
-
 </html>
