@@ -1,21 +1,15 @@
 package de.adesso.openaishowcase.Enums;
 
-public enum Category {
-
-    EINLADUNG,
-    ANGEBOT,
-    AUFTRAGSBESTÄTIGUNG,
-    MEETING,
-    WERBUNG,
-    ABWESENHEIT,
-    NEWSLETTER,
-    FRAGE,
-    STATUS,
+public enum Mood {
+    POSITIV,
+    NEGATIV,
+    ESKALATION,
     SONSTIGES;
+
 
     public static String validate(String answer){
 
-        for (Category c : Category.values()){
+        for (Mood c : Mood.values()){
             if (answer.contains(c.name())){
                 return c.name();
             }
@@ -24,3 +18,4 @@ public enum Category {
     }
 
 }
+

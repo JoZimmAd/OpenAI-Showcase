@@ -4,30 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 
-<div class="container my-2">
-    <h3>Liste der Emails</h3>
-    <table style="width:80%" border="1"
-           class="table table-striped table-responsive-md">
-        <thead class="table-header">
-        <tr>
-            <th>Kategorie</th>
-            <th>Absender</th>
-            <th>Datum</th>
-            <th>Betreff</th>
-            <th>Stimmung</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="mail:${mailList}">
-            <td th:text="${mail.category}"></td>
-            <td th:text="${mail.from_person}"></td>
-            <td th:text="${mail.timestamp}"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-<br/>
 
 <div class="even-row-color">
 
@@ -36,10 +12,59 @@
     </form>
 
     <form method="post" action="/scan">
-        <button>Kategorisiere die Mails</button>
+        <button>Alle Mails kategorisieren</button>
     </form>
 </div>
 
+<div class="container my-2">
+    <h3>Liste der Emails</h3>
+    <table style="width:80%" border="1"
+           class="table table-striped table-responsive-md">
+        <thead class="table-header">
+        <tr>
+            <th>Datum</th>
+            <th>Kategorie</th>
+            <th>Stimmung</th>
+            <th>Absender</th>
+            <th>Betreff</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="mail:${mailList}">
+            <td th:text="${mail.timestamp}"></td>
+            <td th:if="${mail.category} == null">
+                <form action="/send/{id}" method="post" id="categorize">
+                    <button th:field="${mail.id}"
+                            onclick="sendRequest()">Kategorisieren</button>
+                </form>
+            </td>
+            <td th:text="${mail.mood}"></td>
+            <td th:text="${mail.from_person}"></td>
+            <td th:text="${mail.sentiment}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script th:inline="javascript">
+    function sendRequest(mailId) {
+        // Send the data to the backend using AJAX
+        let xhr = new XMLHttpRequest();
+        let url = "/scan/?mailId=" + mailId;
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send();
+
+        // Handle the response from the backend if needed
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                // Handle success response if needed
+            } else {
+                // Handle error response if needed
+            }
+        };
+    }
+</script>
 
 
 </html>
