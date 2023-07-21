@@ -34,12 +34,16 @@ public class Mail {
     @Column()
     private String mood;
 
-    public Mail(String from_person, String to_person, Date date, String text, String subject){
+    @Column()
+    private String origin;
+
+    public Mail(String from_person, String to_person, Date date, String text, String subject, String origin){
         this.timestamp = date;
         this.from_person = from_person;
         this.to_person = to_person;
         this.text = text;
         this.subject = subject;
+        this.origin = origin;
     }
 
     public Mail(){
@@ -108,5 +112,14 @@ public class Mail {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
     }
 }

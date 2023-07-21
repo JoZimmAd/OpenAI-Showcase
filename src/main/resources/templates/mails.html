@@ -2,16 +2,17 @@
 <head>
     <title>OpenAI - Showcase</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link th:href="@{/css/main.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/main.css}" rel="stylesheet" type="text/css"/>
 </head>
 
 
 <h2>Liste der Emails</h2>
 
+<body>
 <div class="float-parent-element">
     <div class="float-child-element">
         <form method="get" action="/fetch">
-            <button>Lade neue Mails</button>
+            <button>Lade neue Mails vom Server</button>
         </form>
     </div>
     <div class="float-child-element">
@@ -32,6 +33,7 @@
             <th>Betreff</th>
             <th>Absender</th>
             <th>Inhalt</th>
+            <th>Mailserver</th>
         </tr>
         </thead>
         <tbody>
@@ -57,8 +59,11 @@
                     </form>
                 </div>
             </td>
+            <td th:text="${mail.origin}"></td>
         </tr>
         </tbody>
     </table>
 </div>
+</body>
+
 </html>

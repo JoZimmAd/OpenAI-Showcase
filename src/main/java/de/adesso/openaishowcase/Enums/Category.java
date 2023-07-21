@@ -1,7 +1,6 @@
 package de.adesso.openaishowcase.Enums;
 
 public enum Category {
-
     EINLADUNG,
     ANGEBOT,
     AUFTRAGSBESTÄTIGUNG,
@@ -11,7 +10,9 @@ public enum Category {
     NEWSLETTER,
     FRAGE,
     STATUS,
-    SONSTIGES;
+    SONSTIGES,
+    BEWERBUNG,
+    LOGISTIK;
 
     public static String validate(String answer){
 

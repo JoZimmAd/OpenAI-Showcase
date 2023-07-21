@@ -77,7 +77,8 @@ public class ScanController {
                     m.getAllRecipients()[0].toString(),
                     m.getSentDate(),
                     getTextFromMessage(m),
-                    m.getSubject());
+                    m.getSubject(),
+                    email);
             Optional<Mail> persisted = mailRepository.findByTimestamp(mail.getTimestamp());
             if (persisted.isEmpty()) {
                 mailRepository.save(mail);
