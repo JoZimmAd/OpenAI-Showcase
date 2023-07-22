@@ -1,11 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>OpenAI - Showcase</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:href="@{static/css/main.css}" rel="stylesheet"/>
 </head>
 <body>
 
+<div th:object="${mail}">
+    <label for="w3review"></label>
+    <textarea id="w3review" name="w3review" rows="35" cols="150" th:text="${mail.text}">
+</textarea>
+</div>
+<form method="get" action="/mails">
+    <button>Gehe zurück</button>
+</form>
 
 
 </body>
