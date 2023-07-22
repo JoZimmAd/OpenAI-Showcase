@@ -11,15 +11,15 @@ import java.util.logging.Logger;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
-public class ScanControllerTest {
+public class MailControllerTest {
 
     private long startTime;
-    private static final Logger LOGGER = Logger.getLogger(ScanControllerTest.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(MailControllerTest.class.getName());
 
     MockMvc mockMvc;
 
     @InjectMocks
-    ScanController scanController;
+    MailController scanController;
 
     @BeforeEach
     public void setUp() {
