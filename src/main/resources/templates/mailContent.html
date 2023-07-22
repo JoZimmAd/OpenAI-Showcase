@@ -13,16 +13,25 @@
     <table>
         <thead>
         <tr>
-            <th>
+            <td th:if="${mail.category} != null">
                 <div th:text="'Kategorie: ' + ${mail.category}"></div>
-            </th>
+            </td>
             <th>
                 <label>
                 </label>
             </th>
-            <th>
+            <td th:if="${mail.category} != null">
+                <div th:text="'Kategorie: ' + ${mail.category}"></div>
+            </td>
+            <td th:if="${mail.mood} != null">
                 <div th:text="'Stimmung: ' + ${mail.mood}"></div>
-            </th>
+            </td>
+            <td th:if="${mail.subject} != null">
+                <div th:text="'Betreff: ' + ${mail.subject}"></div>
+            </td>
+            <td th:if="${mail.from_person} != null">
+                <div th:text="'Absender: ' + ${mail.from_person}"></div>
+            </td>
         </tr>
         </thead>
     </table>
@@ -31,7 +40,7 @@
 </textarea>
 </div>
 <form method="get" action="/mails">
-    <button>Gehe zurück</button>
+    <button>Zurück zur Listenansicht</button>
 </form>
 </body>
 </html>

@@ -68,14 +68,7 @@ public class MailController {
         return mav;
     }
 
-//    @GetMapping(value = "/mails/{id}")
-//    public Mail mailsModelAndView(@PathVariable Long id) {
-//        Optional<Mail> mailOpt = mailRepository.findById(id);
-//        return mailOpt.orElse(null);
-//    }
-
     @GetMapping("/fetch")
-//    @Async
     public String fetchMails(@Value("${mail.imap.user}") String email,
                              @Value("${mail.imap.password}") String password,
                              @Value("${mail.imap.host}") String host) throws Exception {
