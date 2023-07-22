@@ -2,25 +2,29 @@
 <head>
     <title>OpenAI - Showcase</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link th:href="@{/css/main.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{static/css/main.css}" rel="stylesheet"/>
 </head>
 
 
 <h2>Liste der Emails</h2>
 
 <body>
-<div class="float-parent-element">
-    <div class="float-child-element">
-        <form method="get" action="/fetch">
-            <button>Lade neue Mails vom Server</button>
-        </form>
-    </div>
-    <div class="float-child-element">
-        <form method="post" action="/scan">
-            <button>Alle Mails kategorisieren</button>
-        </form>
-    </div>
-</div>
+<table>
+    <thead>
+    <tr>
+        <th>
+            <form method="get" action="/fetch">
+                <button>Lade neue Mails vom Server</button>
+            </form>
+        </th>
+        <th>
+            <form method="post" action="/scan">
+                <button>Alle Mails kategorisieren</button>
+            </form>
+        </th>
+    </tr>
+    </thead>
+</table>
 
 <div class="container my-2">
     <table style="width:80%" border="1"
@@ -54,7 +58,7 @@
             <td th:text="${mail.from_person}"></td>
             <td>
                 <div>
-                    <form th:action="@{/scan/{id}(id=${mail.id})}" method="get">
+                    <form th:action="@{/mails/{id}(id=${mail.id})}" method="get">
                         <button>Anzeigen</button>
                     </form>
                 </div>

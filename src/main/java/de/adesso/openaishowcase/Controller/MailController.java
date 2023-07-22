@@ -49,16 +49,30 @@ public class MailController {
     private MailRepository mailRepository;
 
     @ModelAttribute("mailList")
-    public List<Mail> mails() {
+    public List<Mail> mailList() {
         return mailRepository.findAllByOrderByTimestampDesc();
     }
 
     @RequestMapping(value = "/mails", method = RequestMethod.GET)
-    public ModelAndView mailsModelAndView(Mail mail) {
+    public ModelAndView mails() {
         ModelAndView mav = new ModelAndView("mails");
         mav.addObject("mailList", mailRepository.findAllByOrderByTimestampDesc());
         return mav;
     }
+
+    @RequestMapping(value = "/mails/{id}", method = RequestMethod.GET)
+    public ModelAndView findById(@PathVariable  Long id) {
+        ModelAndView mav = new ModelAndView("mailContent");
+        Optional<Mail> mailOpt = mailRepository.findById(id);
+        mailOpt.ifPresent(mail -> mav.addObject("mail", mail));
+        return mav;
+    }
+
+//    @GetMapping(value = "/mails/{id}")
+//    public Mail mailsModelAndView(@PathVariable Long id) {
+//        Optional<Mail> mailOpt = mailRepository.findById(id);
+//        return mailOpt.orElse(null);
+//    }
 
     @GetMapping("/fetch")
 //    @Async
@@ -89,30 +103,12 @@ public class MailController {
         return "redirect:mails";
     }
 
+
     @GetMapping("/scan/{id}")
     public String scanSingleMail(@PathVariable Long id) throws JsonProcessingException, InterruptedException {
-        String prompt = StringUtils.EMPTY;
-        String answerString = StringUtils.EMPTY;
-
-        Mail mailRes;
         Optional<Mail> mailOpt = mailRepository.findById(id);
-
         if (mailOpt.isPresent()) {
-            mailRes = mailOpt.get();
-            prompt = String.format("Kategorisiere den Inhalt folgender E-Mail nach vorgegebenen Kategorien und Stimmungen: " +
-                            "Kategorien: %s, " +
-                            "Stimmungen: %s, " +
-                            "Inhalt der email: %s",
-                    Arrays.toString(Category.values()),
-                    Arrays.toString(Mood.values()),
-                    mailRes.getText());
-
-            prompt = MailUtils.replaceLineBreaks(prompt);
-            answerString = apiRequest.askQuestion(prompt);
-            ApiAnswer answer = new ObjectMapper().readValue(answerString, ApiAnswer.class);
-            mailRes.setCategory(Category.validate(Category.validate(answer.getChoices()[0].getMessage().getAnswer())));
-            mailRes.setMood(Mood.validate(Mood.validate(answer.getChoices()[0].getMessage().getAnswer())));
-            mailRepository.save(mailRes);
+            categorize(mailOpt.get());
             return "redirect:/mails";
         }
         return "redirect:/mails";
@@ -120,38 +116,36 @@ public class MailController {
 
     @PostMapping("/scan")
     public String scanMails() throws JsonProcessingException, InterruptedException {
-        String prompt = StringUtils.EMPTY;
-        String answerString = StringUtils.EMPTY;
-
-        //Send all uncategorized mails to OpenAI
-        //Insert new categorized mails in database
         List<Mail> persistedMails = mailRepository.findAllUncategorized();
-
         int counter = 0;
         for (Mail m : persistedMails) {
             if (counter >= 2) {
                 Thread.sleep(21000);
                 LOGGER.info("Sleeping for 21s...");
             }
-
-            prompt = String.format("Kategorisiere den Inhalt folgender E-Mail nach vorgegebenen Kategorien und Stimmungen: " +
-                            "Kategorien: %s, " +
-                            "Stimmungen: %s, " +
-                            "Inhalt der email: %s",
-                    Arrays.toString(Category.values()),
-                    Arrays.toString(Mood.values()),
-                    m.getText());
-
-            prompt = MailUtils.replaceLineBreaks(prompt);
-            answerString = apiRequest.askQuestion(prompt);
-            ApiAnswer answer = new ObjectMapper().readValue(answerString, ApiAnswer.class);
-            String category = Category.validate(answer.getChoices()[0].getMessage().getAnswer());
-            String mood = Mood.validate(answer.getChoices()[0].getMessage().getAnswer());
-            m.setCategory(Category.validate(category));
-            m.setMood(Mood.validate(mood));
-            mailRepository.save(m);
+            categorize(m);
             counter++;
         }
         return "redirect:mails";
+    }
+
+    private void categorize(Mail mail) throws JsonProcessingException {
+        String prompt = StringUtils.EMPTY;
+        String answerString = StringUtils.EMPTY;
+        prompt = String.format("Kategorisiere den Inhalt folgender E-Mail nach vorgegebenen Kategorien und Stimmungen: " +
+                        "Kategorien: %s, " +
+                        "Stimmungen: %s, " +
+                        "Inhalt der email: %s",
+                Arrays.toString(Category.values()),
+                Arrays.toString(Mood.values()),
+                mail.getText());
+        prompt = MailUtils.replaceLineBreaks(prompt);
+        answerString = apiRequest.askQuestion(prompt);
+        ApiAnswer answer = new ObjectMapper().readValue(answerString, ApiAnswer.class);
+        String category = Category.validate(answer.getChoices()[0].getMessage().getAnswer());
+        String mood = Mood.validate(answer.getChoices()[0].getMessage().getAnswer());
+        mail.setCategory(Category.validate(category));
+        mail.setMood(Mood.validate(mood));
+        mailRepository.save(mail);
     }
 }
