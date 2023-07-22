@@ -7,7 +7,25 @@
 </head>
 <body>
 
+<h2>Einzelansicht</h2>
+
 <div th:object="${mail}">
+    <table>
+        <thead>
+        <tr>
+            <th>
+                <div th:text="'Kategorie: ' + ${mail.category}"></div>
+            </th>
+            <th>
+                <label>
+                </label>
+            </th>
+            <th>
+                <div th:text="'Stimmung: ' + ${mail.mood}"></div>
+            </th>
+        </tr>
+        </thead>
+    </table>
     <label for="w3review"></label>
     <textarea id="w3review" name="w3review" rows="35" cols="150" th:text="${mail.text}">
 </textarea>
@@ -15,7 +33,5 @@
 <form method="get" action="/mails">
     <button>Gehe zurück</button>
 </form>
-
-
 </body>
 </html>
