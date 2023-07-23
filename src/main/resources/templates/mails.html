@@ -4,67 +4,129 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Lexend' rel='stylesheet'>
+    <!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">-->
+
+    <!--    <link rel="stylesheet" href="/css/styles.css" />-->
+
+
+    <style>
+        #background-bar {
+            background-color: #e6e6df;
+            height: 100%;
+            position: inherit;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        #footer {
+            background-color: #e6e6df;
+            position: fixed;
+            bottom: 0;
+            height: 50px;
+            width: 100%;
+        }
+
+        body {
+            font-family: 'Lexend', serif;
+        }
+
+        h2 {
+            color: #232326;
+        }
+
+        .bar {
+            width: 100%;
+            height: 80px;
+            background: #e6e6df;
+            margin-top: 300px;
+            position: ;
+            padding: 0px;
+        }
+
+        button {
+            border: 1px solid;
+            border-radius: 5px;
+            color: #232326;
+            background-color: white;
+        }
+
+        /*table {background-color: #e6e6df;}*/
+    </style>
 </head>
+
 <body>
 <div class="container">
-    <h2>Listenansicht</h2>
-    <hr/>
-    <table>
-        <thead>
-        <tr>
-            <th>
-                <form method="get" action="/fetch">
-                    <button>Lade neue Mails vom Server</button>
-                </form>
-            </th>
-            <th>
-                <form method="post" action="/scan">
-                    <button>Alle Mails kategorisieren</button>
-                </form>
-            </th>
-        </tr>
-        </thead>
-    </table>
-    <table style="width:90%" border="1"
-           class="table table-striped table-responsive-md">
-        <thead class="table-header">
-        <tr>
-            <th>Datum</th>
-            <th>Kategorie</th>
-            <th>Stimmung</th>
-            <th>Betreff</th>
-            <th>Absender</th>
-            <th>Inhalt</th>
-            <th>Mailserver</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="mail:${mailList}">
-            <td th:text="${mail.timestamp}"></td>
-            <td>
-                <div th:if="${mail.category} == null">
-                    <form th:action="@{/scan/{id}(id=${mail.id})}" method="get">
-                        <button>Kategorisieren</button>
+    <div>
+        <img alt="Logo Heidelberg Cement"
+             src="https://www.heidelbergmaterials.com/sites/default/files/logo/HeidelbergMaterials.svg"
+             width="200"
+             height="100">
+        <h2>Listenansicht</h2>
+        <hr/>
+        <table>
+            <thead>
+            <tr>
+                <th>
+                    <form method="get" action="/fetch">
+                        <button>Lade neue Mails vom Server</button>
                     </form>
-                </div>
-                <div th:else>
-                    <div th:text="${mail.category}"></div>
-                </div>
-            </td>
-            <td th:text="${mail.mood}"></td>
-            <td th:text="${mail.subject}"></td>
-            <td th:text="${mail.from_person}"></td>
-            <td>
-                <div>
-                    <form th:action="@{/mails/{id}(id=${mail.id})}" method="get">
-                        <button>Anzeigen</button>
+                </th>
+                <th>
+                    <form method="post" action="/scan">
+                        <button>Alle Mails kategorisieren</button>
                     </form>
-                </div>
-            </td>
-            <td th:text="${mail.origin}"></td>
-        </tr>
-        </tbody>
-    </table>
+                </th>
+            </tr>
+            </thead>
+        </table>
+        <table style="width:90%" border="1"
+               class="table table-responsive-lg">
+            <thead class="table-header">
+            <tr>
+                <th>Datum</th>
+                <th>Kategorie</th>
+                <th>Stimmung</th>
+                <th>Betreff</th>
+                <th>Absender</th>
+                <th>Inhalt</th>
+                <th>Mailserver</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="mail:${mailList}">
+                <td th:text="${mail.timestamp}"></td>
+                <td>
+                    <div th:if="${mail.category} == null">
+                        <form th:action="@{/scan/{id}(id=${mail.id})}" method="get">
+                            <button>Kategorisieren</button>
+                        </form>
+                    </div>
+                    <div th:else>
+                        <div th:text="${mail.category}"></div>
+                    </div>
+                </td>
+                <td th:text="${mail.mood}"></td>
+                <td th:text="${mail.subject}"></td>
+                <td th:text="${mail.from_person}"></td>
+                <td>
+                    <div>
+                        <form th:action="@{/mails/{id}(id=${mail.id})}" method="get">
+                            <button>Anzeigen</button>
+                        </form>
+                    </div>
+                </td>
+                <td th:text="${mail.origin}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<!--&lt;!&ndash;<section id="background-bar">&ndash;&gt;-->
+<!--</section>-->
+<div class="bar"></div>
 </body>
+
 </html>

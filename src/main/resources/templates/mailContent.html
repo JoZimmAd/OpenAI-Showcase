@@ -5,17 +5,45 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Lexend' rel='stylesheet'>
+    <!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">-->
+
+    <!--    <link rel="stylesheet" href="/css/styles.css" />-->
+
+
+    <style>
+        body {
+            font-family: 'Lexend', serif;
+        }
+
+        h2 {
+            color: #232326;
+        }
+
+        button {
+            border: 1px solid;
+            border-radius: 5px;
+            color: #232326;
+            background-color: white;
+        }
+
+        /*table {background-color: #e6e6df;}*/
+    </style>
+
 </head>
 <body>
-
 <div class="container" th:object="${mail}">
+    <img alt="Logo Heidelberg Cement"
+         src="https://www.heidelbergmaterials.com/sites/default/files/logo/HeidelbergMaterials.svg"
+         width="200"
+         height="100">
     <h2>Einzelansicht</h2>
     <hr/>
     <table>
         <thead>
         <tr>
             <th th:if="${mail.category} != null">
-                <div th:text="'Kategorie / Stimmung: ' + ${mail.category} + ' / ' + ${mail.mood} "></div>
+                <div th:text="'Kategorie / Stimmung:    ' + ${mail.category} + ' / ' + ${mail.mood} "></div>
             </th>
         </tr>
         </thead>
