@@ -38,7 +38,6 @@ public class MailController {
     public static final List<Category> CATEGORIES = new ArrayList<Category>(EnumSet.allOf(Category.class));
     private static final Logger LOGGER = Logger.getLogger(MailController.class.getName());
 
-
     @Autowired
     private MailConnection connection;
 
@@ -95,7 +94,6 @@ public class MailController {
         connection.close();
         return "redirect:mails";
     }
-
 
     @GetMapping("/scan/{id}")
     public String scanSingleMail(@PathVariable Long id) throws JsonProcessingException, InterruptedException {
