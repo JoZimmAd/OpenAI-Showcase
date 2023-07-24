@@ -52,6 +52,96 @@
             display: block;
         }
 
+
+        /* CSS-only info box on hover
+ * Ken Sparby, @kensparby */
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .hover-container {
+            position: relative;
+        }
+
+        .hover-target {
+            position: relative;
+            /*font-size: 2rem;*/
+        }
+
+        .hover-popup {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            top: 70%;
+            left: 5%;
+            width: 50ch;
+            margin: min(1rem, 20px);
+            font-size: .8rem;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 1.5em;
+            z-index: 42;
+            transform: scale(0);
+            transition: transform 200ms ease;
+            transform-origin: 8% -10px;
+        }
+
+        .hover-target:hover + .hover-popup,
+        .hover-target:focus + .hover-popup,
+        .hover-popup:hover {
+            transform: scale(1);
+        }
+
+        .hover-popup :not(:first-child) {
+            margin-top: 1rem;
+        }
+
+        .hover-popup span {
+            color: rgb(200, 20, 0);
+            font-weight: 700;
+        }
+
+        .hover-popup::before {
+            /* This is the triangle/arrow */
+            content: '';
+            position: absolute;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid #fff;
+            top: -10px;
+        }
+
+        .hover-popup::after {
+            /* This is merely here to expand the hoverable area, as a buffer between the "Hover me" text and the popup. */
+            content: '';
+            position: absolute;
+            top: -1rem;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            ::before,
+            ::after {
+                animation-delay: -1ms !important;
+                animation-duration: -1ms !important;
+                animation-iteration-count: 1 !important;
+                background-attachment: initial !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0s !important;
+                transition-delay: 0s !important;
+            }
+        }
+
     </style>
 </head>
 
@@ -76,8 +166,25 @@
             </th>
             <th>
                 <form method="post" action="/scan">
-                    <button class="btn">Alle Mails kategorisieren</button>
+                    <button class="btn">Alle Mails auswerten</button>
                 </form>
+            </th>
+            <th valign="top">
+                <div>
+
+                    <div class="hover-container">
+                        <div class="hover-target" tabindex="0">
+                            <i class="fa fa-info-circle"></i>
+                        </div>
+                        <aside class="hover-popup">
+                            <h5>Zusatzinformationen</h5>
+                            <p>Die Auswertung der eingegangenen E-Mails erfolgt nach Kategorien und Stimmungen.</p>
+                            <p>Aktuell verfügbare Kategorien sind: EINLADUNG, ANGEBOT, AUFTRAGSBESTÄTIGUNG, MEETING,
+                                WERBUNG, ABWESENHEIT, NEWSLETTER, FRAGE, STATUS, BEWERBUNG, LOGISTIK, SONSTIGES. </p>
+                            <p>Aktuell verfügbare Stimmungen sind: POSITIV, NEGATIV, ESKALATION, SONSTIGES. </p>
+                        </aside>
+                    </div>
+                </div>
             </th>
         </tr>
         </thead>
@@ -102,7 +209,7 @@
             <td>
                 <div th:if="${mail.category} == null">
                     <form th:action="@{/scan/{id}(id=${mail.id})}" method="get">
-                        <button class="btn">Kategorisieren</button>
+                        <button class="btn">Auswerten</button>
                     </form>
                 </div>
                 <div th:else>
