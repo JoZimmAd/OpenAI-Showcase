@@ -37,6 +37,18 @@
             background-color: #e6e6df;
         }
 
+        .btn i:nth-child(2) {
+            display: none;
+        }
+
+        .btn:hover i:nth-child(1) {
+            display: none;
+        }
+
+        .btn:hover i:nth-child(2) {
+            display: block;
+        }
+
     </style>
 </head>
 
@@ -100,6 +112,7 @@
                     <form th:action="@{/mails/{id}(id=${mail.id})}" method="get">
                         <button class="btn">
                             <i class="fa fa-envelope-o"></i>
+                            <i class="fa fa-envelope-open-o"></i>
                         </button>
                     </form>
                 </div>
