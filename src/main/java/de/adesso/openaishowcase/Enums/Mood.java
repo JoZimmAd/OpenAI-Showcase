@@ -4,7 +4,7 @@ public enum Mood {
     POSITIV,
     NEGATIV,
     ESKALATION,
-    SONSTIGES;
+    NEUTRAL;
 
 
     public static String validate(String answer){
@@ -14,7 +14,7 @@ public enum Mood {
                 return c.name();
             }
         }
-        return SONSTIGES.name();
+        return NEUTRAL.name();
     }
 
 }
