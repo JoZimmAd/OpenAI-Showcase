@@ -2,28 +2,24 @@ package de.adesso.openaishowcase.Controller;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.logging.Logger;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-public class ScanControllerTest {
+public class MailControllerTest {
 
     private long startTime;
-    private static final Logger LOGGER = Logger.getLogger(ScanControllerTest.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(MailControllerTest.class.getName());
 
     MockMvc mockMvc;
 
     @InjectMocks
-    ScanController scanController;
+    MailController scanController;
 
     @BeforeEach
     public void setUp() {

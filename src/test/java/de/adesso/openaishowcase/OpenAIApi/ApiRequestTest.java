@@ -9,9 +9,7 @@ import de.adesso.openaishowcase.Repositories.MailRepository;
 import de.adesso.openaishowcase.Utils.MailUtils;
 import de.adesso.openaishowcase.Utils.StringUtils;
 import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
 import org.apache.tomcat.util.json.ParseException;
-import org.apache.xalan.res.XSLTErrorResources_en;
 import org.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +40,7 @@ public class ApiRequestTest {
     private MailRepository mailRepository;
 
     @Test
-    public void askQuestion_Should_Not_Be_Empty_de() throws JSONException, ParseException {
+    public void askQuestion_Should_Not_Be_Empty_de(){
         String prompt_de = "Fasse die folgende E-Mail kurz zusammen: Sehr geehrter Herr X, wir haben versucht sie wegen Ihrer Autoversicherung zu erreichen. Bitte rufen Sie mich möglichst zeitnah zurück. Mit freundlichen Grüen, Mrs. Y";
 
         String answer = apiRequest.askQuestion(prompt_de);
@@ -51,7 +49,7 @@ public class ApiRequestTest {
     }
 
     @Test
-    public void askQuestion_Should_Not_Be_Empty_en() throws JSONException, ParseException {
+    public void askQuestion_Should_Not_Be_Empty_en(){
         String prompt_en = "What is the content of the following E-Mail: Dear Mr. X, we tried to reach you because of your car insurance. Please call back as soon as possible. Kind Regards, Mrs. Y";
 
         String answer = apiRequest.askQuestion(prompt_en);
@@ -88,7 +86,7 @@ public class ApiRequestTest {
         isTrue(answer.getChoices()[0].getMessage().getAnswer().equals("Neutral."),"Answer was false categorized");
     }
     @Test
-    public void askQuestion_Should_Return_Neutral_EMail_en() throws JSONException, ParseException, JsonProcessingException {
+    public void askQuestion_Should_Return_Neutral_EMail_en() throws JsonProcessingException {
         String prompt_en = "Is the following text negative, positive or neutral? The result is ok";
 
         String answerstring = apiRequest.askQuestion(prompt_en);
@@ -98,7 +96,7 @@ public class ApiRequestTest {
     }
 
     @Test
-    public void askQuestion_Should_Return_Negative_EMail_de() throws JSONException, ParseException, JsonProcessingException {
+    public void askQuestion_Should_Return_Negative_EMail_de() throws JsonProcessingException {
         String prompt_de = "Ist der folgende Text negativ, positiv oder neutral? Das Ergebnis ist schlecht";
 
         String answerstring = apiRequest.askQuestion(prompt_de);
@@ -117,7 +115,7 @@ public class ApiRequestTest {
     }
 
     @Test
-    public void askQuestion_Filter_For_EMail_Topic_de() throws JSONException, ParseException, JsonProcessingException {
+    public void askQuestion_Filter_For_EMail_Topic_de() throws JsonProcessingException {
         String prompt_de = "Es ist folgende E-Mail gegeben: " +
                 "Sehr geehrter Herr X, ich benötige für die Umsetzung bei meiner Tätigkeit als Entwickler Unterstützung " +
                 "beim Aufsetzen einer Entwicklungsumgebung. Mit freundlichen Grüßen, Mr. Y" +
@@ -175,13 +173,13 @@ public class ApiRequestTest {
         List<Category> enumValues = new ArrayList<Category>(EnumSet.allOf(Category.class));
 
         for (Message m : messageList){
-            String prompt = "Kategorisiere folgende E-Mail nach den Kategorien " + enumValues.toString() + " " + getTextFromMessage(m);
+            String prompt = "Kategorisiere folgende E-Mail " + getTextFromMessage(m);
             prompt = MailUtils.replaceLineBreaks(prompt);
             logger.info("Message Body: " + prompt);
-            String answerString = apiRequest.askQuestion(prompt);
+            String answerString = apiRequest.categorize(prompt);
             ApiAnswer answer = new ObjectMapper().readValue(answerString, ApiAnswer.class);
             String returnedAnswer = answer.getChoices()[0].getMessage().getAnswer();
-            Mail mail = new Mail(m.getFrom().toString(), m.getAllRecipients().toString(), m.getSentDate(), getTextFromMessage(m));
+            Mail mail = new Mail(m.getFrom().toString(), m.getAllRecipients().toString(), m.getSentDate(), getTextFromMessage(m), m.getSubject(), "openaishowcase@gmx.de");
             String validatedAnswer = Category.validate(returnedAnswer);
             mail.setCategory(validatedAnswer);
             mailRepository.save(mail);

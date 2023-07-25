@@ -15,7 +15,7 @@ public class ApiRequest {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public String askQuestion(String prompt){
+    public String askQuestion(String prompt) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + apiKey);
@@ -25,17 +25,27 @@ public class ApiRequest {
         return response.getBody();
     }
 
-    public String askQuestion(String prompt, String prompt2){
+    public String askQuestion(String prompt, String prompt2) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + apiKey);
-        HttpEntity<String> request = new HttpEntity<>(new RequestWrapper().wrap(prompt,prompt2), headers);
+        HttpEntity<String> request = new HttpEntity<>(new RequestWrapper().wrap(prompt, prompt2), headers);
         System.out.println(request);
         ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_URL, request, String.class);
         return response.getBody();
     }
 
-    public String getApiKey(){
+    public String categorize(String prompt) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer " + apiKey);
+        HttpEntity<String> request = new HttpEntity<>(new RequestWrapper().wrap_categorize(prompt), headers);
+        System.out.println(request);
+        ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_URL, request, String.class);
+        return response.getBody();
+    }
+
+    public String getApiKey() {
         return this.apiKey;
     }
 }

@@ -1,0 +1,237 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>OpenAI - Showcase</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Lexend' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        body {
+            font-family: 'Lexend', serif;
+            color: #232326;
+        }
+
+        h2 {
+            color: #232326;
+        }
+
+        .bar {
+            width: 100%;
+            height: 80px;
+            background: #e6e6df;
+            margin-top: 250px;
+            position: fixed;
+            padding: 0px;
+        }
+
+        .btn {
+            border: 1px solid;
+            border-radius: 8px;
+            color: #232326;
+            background-color: white;
+        }
+
+        .btn:hover {
+            border-radius: 8px;
+            background-color: #e6e6df;
+            border-color: #e6e6df;
+        }
+
+        .btn i:nth-child(2) {
+            display: none;
+            border-radius: 8px;
+        }
+
+        .btn:hover i:nth-child(1) {
+            display: none;
+        }
+
+        .btn:hover i:nth-child(2) {
+            display: block;
+        }
+
+
+        /* CSS-only info box on hover
+ * Ken Sparby, @kensparby */
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .hover-container {
+            position: relative;
+        }
+
+        .hover-target {
+            position: relative;
+            /*font-size: 2rem;*/
+        }
+
+        .hover-popup {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            top: 70%;
+            left: 5%;
+            width: 50ch;
+            margin: min(1rem, 20px);
+            font-size: .8rem;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 1.5em;
+            z-index: 42;
+            transform: scale(0);
+            transition: transform 200ms ease;
+            transform-origin: 8% -10px;
+        }
+
+        .hover-target:hover + .hover-popup,
+        .hover-target:focus + .hover-popup,
+        .hover-popup:hover {
+            transform: scale(1);
+        }
+
+        .hover-popup :not(:first-child) {
+            margin-top: 1rem;
+        }
+
+        .hover-popup span {
+            color: rgb(200, 20, 0);
+            font-weight: 700;
+        }
+
+        .hover-popup::before {
+            /* This is the triangle/arrow */
+            content: '';
+            position: absolute;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid #fff;
+            top: -10px;
+        }
+
+        .hover-popup::after {
+            /* This is merely here to expand the hoverable area, as a buffer between the "Hover me" text and the popup. */
+            content: '';
+            position: absolute;
+            top: -1rem;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            ::before,
+            ::after {
+                animation-delay: -1ms !important;
+                animation-duration: -1ms !important;
+                animation-iteration-count: 1 !important;
+                background-attachment: initial !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0s !important;
+                transition-delay: 0s !important;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div>
+        <img alt="Logo Heidelberg Cement"
+             src="https://www.heidelbergmaterials.com/sites/default/files/logo/HeidelbergMaterials.svg"
+             width="200"
+             height="100">
+        <h2>Listenansicht</h2>
+    </div>
+    <hr/>
+    <p>Server: openaishowcase@gmx.de</p>
+    <table>
+        <thead>
+        <tr>
+            <th>
+                <form method="get" action="/fetch">
+                    <button class="btn">Lade neue Mails</button>
+                </form>
+            </th>
+            <th>
+                <form method="post" action="/scan">
+                    <button class="btn">Alle Mails auswerten</button>
+                </form>
+            </th>
+            <th valign="top">
+                <div>
+
+                    <div class="hover-container">
+                        <div class="hover-target" tabindex="0">
+                            <i class="fa fa-info-circle"></i>
+                        </div>
+                        <aside class="hover-popup">
+                            <h5>Zusatzinformationen</h5>
+                            <p>Die Auswertung der eingegangenen E-Mails erfolgt nach Kategorien und Stimmungen.</p>
+                            <p>Aktuell verfügbare Kategorien sind: EINLADUNG, ANGEBOT, AUFTRAGSBESTÄTIGUNG, MEETING,
+                                WERBUNG, ABWESENHEIT, NEWSLETTER, FRAGE, STATUS, BEWERBUNG, LOGISTIK, SONSTIGES. </p>
+                            <p>Aktuell verfügbare Stimmungen sind: POSITIV, NEGATIV, ESKALATION, SONSTIGES. </p>
+                        </aside>
+                    </div>
+                </div>
+            </th>
+        </tr>
+        </thead>
+    </table>
+    <table style="width:100%" border="1"
+           class="table table-responsive-lg">
+        <thead class="table-header">
+        <tr>
+            <th>Absender</th>
+            <th>Betreff</th>
+            <th>Datum</th>
+            <th>Kategorie</th>
+            <th>Stimmung</th>
+            <th>Inhalt</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="mail:${mailList}">
+            <td th:text="${mail.from_person}"></td>
+            <td th:text="${mail.subject}"></td>
+            <td th:text="${mail.timestamp}"></td>
+            <td>
+                <div th:if="${mail.category} == null">
+                    <form th:action="@{/scan/{id}(id=${mail.id})}" method="get">
+                        <button class="btn">Auswerten</button>
+                    </form>
+                </div>
+                <div th:else>
+                    <div th:text="${mail.category}"></div>
+                </div>
+            </td>
+            <td th:text="${mail.mood}"></td>
+            <td>
+                <div>
+                    <form th:action="@{/mails/{id}(id=${mail.id})}" method="get">
+                        <button class="btn">
+                            <i class="fa fa-envelope-o"></i>
+                            <i class="fa fa-envelope-open-o"></i>
+                        </button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="bar"></div>
+</body>
+
+</html>
