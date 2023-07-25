@@ -35,6 +35,16 @@ public class ApiRequest {
         return response.getBody();
     }
 
+    public String categorize(String prompt) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer " + apiKey);
+        HttpEntity<String> request = new HttpEntity<>(new RequestWrapper().wrap_categorize(prompt), headers);
+        System.out.println(request);
+        ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_URL, request, String.class);
+        return response.getBody();
+    }
+
     public String getApiKey() {
         return this.apiKey;
     }
