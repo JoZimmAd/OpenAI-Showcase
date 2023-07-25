@@ -7,13 +7,13 @@ public enum Category {
     ANGEBOT,
     AUFTRAGSBESTÄTIGUNG,
     MEETING,
+    BEWERBUNG,
     WERBUNG,
     ABWESENHEIT,
     NEWSLETTER,
     FRAGE,
     STATUS,
     SONSTIGES,
-    BEWERBUNG,
     LOGISTIK;
 
     public static String validate(String answer){
