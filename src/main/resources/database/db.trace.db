@@ -1,0 +1,8 @@
+2023-07-25 17:50:50 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabelle "MAILS" nicht gefunden (diese Datenbank ist leer)
+Table "MAILS" not found (this database is empty); SQL statement:
+select m1_0.id,m1_0.category,m1_0.from_person,m1_0.mood,m1_0.origin,m1_0.subject,m1_0.text,m1_0.timestamp,m1_0.to_person from mails m1_0 order by m1_0.timestamp desc [42104-214]
+2023-07-25 17:50:53 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabelle "MAILS" nicht gefunden (diese Datenbank ist leer)
+Table "MAILS" not found (this database is empty); SQL statement:
+select m1_0.id,m1_0.category,m1_0.from_person,m1_0.mood,m1_0.origin,m1_0.subject,m1_0.text,m1_0.timestamp,m1_0.to_person from mails m1_0 order by m1_0.timestamp desc [42104-214]
